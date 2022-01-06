@@ -1,0 +1,84 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace MyFormA
+{
+    public partial class FormAgain : Form
+    {
+        Label messiah = new Label();
+        Button[] btn = new Button[4];
+        TableLayoutPanel tbl = new TableLayoutPanel();
+        string[] texts = new string[4];
+        public FormAgain() { }
+        int btn_w, btn_h;
+        public FormAgain(string title, string body, string button1, string button2, string button3, string button4)
+        {
+            texts[0] = button1;
+            texts[1] = button2;
+            texts[2] = button3;
+            texts[3] = button4;
+            this.ClientSize = new System.Drawing.Size(200, 200);
+            this.Text = title;
+            int x = 10;
+            for (int i = 0; i < 4; i++)
+            {
+                btn[i] = new Button
+                {
+                    Location = new System.Drawing.Point(x, 50),
+                    Size = new System.Drawing.Size(80, 25),
+                    Text = texts[i]
+                };
+                btn[i].Click += FormAgain_Click;
+                x += 100;
+                this.Controls.Add(btn[i]);
+            }
+            messiah.Location = new System.Drawing.Point(10, 10);
+            messiah.Text = body;
+            this.Controls.Add(messiah);
+        }
+        public FormAgain(int x,int y)
+        {
+            this.tbl.ColumnCount = x;
+            this.tbl.RowCount = y;
+            this.tbl.ColumnStyles.Clear();
+            this.tbl.RowStyles.Clear();
+            for (int i = 0; i < x; i++)
+            {
+                this.tbl.RowStyles.Add(new RowStyle(SizeType.Percent,
+                    100/y));
+            }
+            for (int i = 0; i < y; i++)
+            {
+                this.tbl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100 / x));
+            }
+            this.Size = new System.Drawing.Size(y * 100, x * 100);
+            for (int i = 0; i < y; i++)
+            {
+                for (int j = 0; j < x; j++)
+                {
+                    var btn_tbl = new Button
+                    {
+                        Text = string.Format("{0}{1}", i,j),
+                        Name = string.Format("btn_{0}{1}",i,j),
+                        Dock = DockStyle.Fill
+                    };
+                    this.tbl.Controls.Add(btn_tbl, i, j);
+                }
+                btn_w = (int)(100 / y);
+                btn_h = (int)(100 / x);
+                this.tbl.Dock = DockStyle.Fill;
+               // this.tbl.Size = new System.Drawing.Size(tbl.ColumnCount * btn_w*4, tbl.RowCount * btn_h*4);
+                this.Controls.Add(tbl);
+            }
+        }
+        private void FormAgain_Click(object sender, EventArgs e)
+        {
+            Button btnS = (Button)sender;
+            MessageBox.Show(btnS.Text + " button was clicked");
+        }
+    }
+}
